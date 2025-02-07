@@ -11,8 +11,8 @@ const Navbar = () => {
         className="h-12 w-12 object-contain animate-pulse"
         alt="Logo"
       />
-      <span className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
-        Juegoteca
+      <span className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-700 to-green-400">
+        Juegoteca virtual
       </span>
     </div>
 

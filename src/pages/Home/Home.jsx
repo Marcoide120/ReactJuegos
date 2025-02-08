@@ -82,45 +82,27 @@ function Home() {
           Los más recientes
         </h2>
 
-        <div className="relative max-w-5xl mx-auto">
-          <div className="overflow-hidden rounded-lg shadow-xl">
-            <div className="relative h-64 sm:h-80 md:h-96 transition-transform duration-500 ease-in-out transform" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-              {games.map((game, index) => (
-                <div key={game.id} className="absolute top-0 left-0 w-full h-full" style={{ left: `${index * 100}%` }}>
-                  <img
-                    src={game.background_image || "/placeholder.svg"}
-                    alt={game.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-                    <h3 className="text-white text-xl font-bold mb-2">{game.name}</h3>
-                    <p className="text-gray-300 text-sm">{game.released}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+        <div className="relative max-w-7xl mx-auto">
+  <div className="overflow-hidden rounded-xl shadow-xl">
+    <div className="relative h-96 sm:h-[500px] md:h-[600px] transition-transform duration-700 ease-in-out transform" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+      {games.map((game, index) => (
+        <div key={game.id} className="absolute top-0 left-0 w-full h-full" style={{ left: `${index * 100}%` }}>
+          <img
+            src={game.background_image || "/placeholder.svg"}
+            alt={game.name}
+            className="w-full h-full object-cover rounded-xl"
+          />
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black opacity-70 p-6 rounded-b-xl">
+            <h3 className="text-white text-3xl font-semibold mb-3">{game.name}</h3>
+            <p className="text-gray-100 text-lg">{game.released}</p>
           </div>
-
-          <button
-            onClick={prevSlide}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75 transition-all"
-            aria-label="Previous game"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-
-          <button
-            onClick={nextSlide}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75 transition-all"
-            aria-label="Next game"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
         </div>
+      ))}
+    </div>
+  </div>
+
+</div>
+
 
         <div className="flex justify-center mt-4 space-x-2">
           {games.map((_, index) => (

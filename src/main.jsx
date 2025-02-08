@@ -10,7 +10,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home/Home";
 import Games from "./pages/videogames/Games";
-/* import GamesDetails, { filmDetailsLoader } from "./pages/GamesDetails/GamesDetails"; */
+import GamesDetails, { loader as gameLoader } from "./pages/GamesDetails/GamesDetails";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 function AppLayout() {
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/Games", element: <Games /> },
-     /*  { path: "/gamesDetails/:id", element: <GamesDetails />, loader: filmDetailsLoader }, */
+      { path: "/gamesDetails/:id", element: <GamesDetails />, loader: gameLoader },
     ],
   },
 ]);
@@ -40,3 +40,4 @@ createRoot(document.getElementById("root")).render(
     <RouterProvider router={router} />
   </StrictMode>
 );
+

@@ -1,4 +1,4 @@
-const APP_KEY= 'e621543c33ee44e48e7b82cfdc83fb23';
+const APP_KEY= 'b2685e103fb743d09dc5325f1174937d';
 
 
 fetch('https://api.rawg.io/api/games?key='+APP_KEY)

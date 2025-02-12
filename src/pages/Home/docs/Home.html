@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Home.jsx</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>Home.jsx</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-1">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { useState, useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">Link</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react-router-dom&quot;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">API_KEY</span> = <span class="hljs-string">&quot;b2685e103fb743d09dc5325f1174937d&quot;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Home</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [isLoading, setIsLoading] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">true</span>);
+  <span class="hljs-keyword">const</span> [games, setGames] = <span class="hljs-title function_">useState</span>([]);
+  <span class="hljs-keyword">const</span> [currentIndex, setCurrentIndex] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> fetchGames = <span class="hljs-keyword">async</span> () =&gt; {
+      <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`https://api.rawg.io/api/games?key=<span class="hljs-subst">${API_KEY}</span>&amp;page_size=10`</span>);
+        <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
+        <span class="hljs-title function_">setGames</span>(data.<span class="hljs-property">results</span>);
+        <span class="hljs-title function_">setIsLoading</span>(<span class="hljs-literal">false</span>);
+      } <span class="hljs-keyword">catch</span> (error) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&quot;Error fetching games:&quot;</span>, error);
+        <span class="hljs-title function_">setIsLoading</span>(<span class="hljs-literal">false</span>);
+      }
+    };
+
+    <span class="hljs-title function_">fetchGames</span>();
+  }, []);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> timer = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">setCurrentIndex</span>(<span class="hljs-function">(<span class="hljs-params">prevIndex</span>) =&gt;</span> (prevIndex + <span class="hljs-number">1</span>) % games.<span class="hljs-property">length</span>);
+    }, <span class="hljs-number">5000</span>);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">clearInterval</span>(timer);
+  }, [games]);
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">nextSlide</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-title function_">setCurrentIndex</span>(<span class="hljs-function">(<span class="hljs-params">prevIndex</span>) =&gt;</span> (prevIndex + <span class="hljs-number">1</span>) % games.<span class="hljs-property">length</span>);
+  };
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">prevSlide</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-title function_">setCurrentIndex</span>(<span class="hljs-function">(<span class="hljs-params">prevIndex</span>) =&gt;</span> (prevIndex - <span class="hljs-number">1</span> + games.<span class="hljs-property">length</span>) % games.<span class="hljs-property">length</span>);
+  };
+
+  <span class="hljs-keyword">if</span> (isLoading) {
+    <span class="hljs-keyword">return</span> (
+      <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;flex items-center justify-center h-screen bg-gray-900&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;text-center&quot;</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-green-500 mx-auto mb-4&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;text-white text-2xl&quot;</span>&gt;</span>Cargando...<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+    );
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;bg-gray-600 min-h-screen&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">section</span>
+        <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;w-full mb-6 py-12 md:py-20 lg:py-28 xl:py-36 flex items-center justify-center bg-cover bg-center bg-no-repeat&quot;</span>
+        <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">backgroundImage:</span> &quot;<span class="hljs-attr">url</span>(&#x27;/<span class="hljs-attr">portada.jpeg</span>&#x27;)&quot; }}
+      &gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;container px-4 md:px-6 flex flex-col items-center text-center&quot;</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;space-y-2&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;text-3xl text-white font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl&quot;</span>&gt;</span>
+              La Juegoteca virtual
+            <span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;mx-auto max-w-[700px] text-gray-200 md:text-xl&quot;</span>&gt;</span>
+              La mejor información sobre videojuegos
+            <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;space-x-4 mt-4&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Link</span>
+              <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;inline-flex h-9 items-center justify-center rounded-md bg-green-500 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-green-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400&quot;</span>
+              <span class="hljs-attr">to</span>=<span class="hljs-string">&quot;/Games&quot;</span>
+            &gt;</span>
+              Adéntrate en el universo virtual
+            <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">section</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;text-center px-4 py-12&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;font-rubiksh text-3xl text-green-400 font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl mb-8&quot;</span>&gt;</span>
+          Los más recientes
+        <span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;relative max-w-7xl mx-auto&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;overflow-hidden rounded-xl shadow-xl&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;relative h-96 sm:h-[500px] md:h-[600px] transition-transform duration-700 ease-in-out transform&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">transform:</span> `<span class="hljs-attr">translateX</span>(<span class="hljs-attr">-</span>${<span class="hljs-attr">currentIndex</span> * <span class="hljs-attr">100</span>}%)` }}&gt;</span>
+      {games.map((game, index) =&gt; (
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{game.id}</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;absolute top-0 left-0 w-full h-full&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">left:</span> `${<span class="hljs-attr">index</span> * <span class="hljs-attr">100</span>}%` }}&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">img</span>
+            <span class="hljs-attr">src</span>=<span class="hljs-string">{game.background_image</span> || &quot;/<span class="hljs-attr">placeholder.svg</span>&quot;}
+            <span class="hljs-attr">alt</span>=<span class="hljs-string">{game.name}</span>
+            <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;w-full h-full object-cover rounded-xl&quot;</span>
+          /&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black opacity-70 p-6 rounded-b-xl&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;text-white text-3xl font-semibold mb-3&quot;</span>&gt;</span>{game.name}<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;text-gray-100 text-lg&quot;</span>&gt;</span>{game.released}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      ))}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;flex justify-center mt-4 space-x-2&quot;</span>&gt;</span>
+          {games.map((_, index) =&gt; (
+            <span class="hljs-tag">&lt;<span class="hljs-name">button</span>
+              <span class="hljs-attr">key</span>=<span class="hljs-string">{index}</span>
+              <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCurrentIndex(index)}
+              className={`w-3 h-3 rounded-full ${
+                index === currentIndex ? &#x27;bg-green-500&#x27; : &#x27;bg-gray-400&#x27;
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            /&gt;
+          ))}
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Home</span>;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

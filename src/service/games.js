@@ -1,8 +1,16 @@
-const APP_KEY= 'b2685e103fb743d09dc5325f1174937d';
 
+export const fetchPopularGames = async () => {
+    const fetchGames = async () => {
+        try {
+          const response = await fetch(`https://api.rawg.io/api/games?key=${API_KEY}&page_size=10`);
+          const data = await response.json();
+          setGames(data.results);
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Error fetching games:", error);
+          setIsLoading(false);
+        }
+      };
 
-fetch('https://api.rawg.io/api/games?key='+APP_KEY)
-.then((response) => response.json())
-.then((data) => console.log(data))
-.catch((error) => console.error("Error al realizar la solicitud:",
-error));
+}
+

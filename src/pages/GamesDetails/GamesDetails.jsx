@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
-
-const API_KEY = "b2685e103fb743d09dc5325f1174937d";
+import { fetchGamesDetails } from "../../service/games"; // Asegúrate de importar la función correctamente
 
 export async function loader({ params }) {
   return { id: params.id };
@@ -13,21 +12,7 @@ export default function GamesDetails() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchGameDetails = async () => {
-      try {
-        const response = await fetch(`https://api.rawg.io/api/games/${id}?key=${API_KEY}`);
-        if (!response.ok) throw new Error("Error al obtener los detalles del juego");
-
-        const data = await response.json();
-        setGame(data);
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchGameDetails();
+    fetchGamesDetails(id, setGame, setLoading);
   }, [id]);
 
   if (isLoading) {
@@ -50,7 +35,6 @@ export default function GamesDetails() {
     <div className="min-h-screen bg-gray-800 text-white">
       <div className="container mx-auto p-6">
         <div className="flex flex-col lg:flex-row gap-10 items-start">
-          {/* Imagen del juego */}
           <div className="w-full lg:w-1/3">
             <img
               src={game.background_image || "/placeholder.svg"}
@@ -58,14 +42,17 @@ export default function GamesDetails() {
               className="rounded-lg shadow-md w-full h-auto object-cover transform hover:scale-105 transition-transform duration-300"
             />
           </div>
-  
-          {/* Información del juego */}
+
           <div className="flex-1">
             <h1 className="text-4xl font-extrabold text-green-400 mb-4">{game.name}</h1>
-            <p className="text-base leading-relaxed text-gray-300 mb-6">{game.description_raw}</p>
-  
+            
+            {game.description_raw ? (
+              <p className="text-base leading-relaxed text-gray-300 mb-6">{game.description_raw}</p>
+            ) : (
+              <p className="text-base leading-relaxed text-gray-300 mb-6">No hay descripción en español disponible.</p>
+            )}
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Detalles generales */}
               <div>
                 <p className="text-lg">
                   <span className="font-bold text-green-400">Fecha de lanzamiento:</span>{" "}
@@ -76,8 +63,7 @@ export default function GamesDetails() {
                   <span className="text-yellow-400">⭐ {game.rating}</span>
                 </p>
               </div>
-  
-              {/* Géneros */}
+
               <div>
                 <p className="font-bold text-green-400 mb-2">Géneros:</p>
                 <ul className="flex flex-wrap gap-2">
@@ -91,8 +77,7 @@ export default function GamesDetails() {
                   ))}
                 </ul>
               </div>
-  
-              {/* Plataformas */}
+
               <div>
                 <p className="font-bold text-green-400 mb-2">Plataformas:</p>
                 <ul className="flex flex-wrap gap-2">
@@ -106,13 +91,38 @@ export default function GamesDetails() {
                   ))}
                 </ul>
               </div>
+
+              <div>
+                <p className="font-bold text-green-400 mb-2">Publisher:</p>
+                <ul className="flex flex-wrap gap-2">
+                  {game.publishers.map((publisher) => (
+                    <li
+                      key={publisher.id}
+                      className="px-4 py-1 rounded-full bg-gray-800 text-gray-300 text-sm font-medium hover:bg-green-500 hover:text-black transition-all duration-200"
+                    >
+                      {publisher.name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <p className="font-bold text-green-400 mb-2">Tags:</p>
+                <ul className="flex flex-wrap gap-2">
+                  {game.tags.map((tag) => (
+                    <li
+                      key={tag.id}
+                      className="px-4 py-1 rounded-full bg-gray-700 text-gray-300 text-sm font-medium hover:bg-green-500 hover:text-black transition-all duration-200"
+                    >
+                      {tag.name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-  
 }
-
-

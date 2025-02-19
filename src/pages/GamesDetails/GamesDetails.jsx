@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useLoaderData } from "react-router-dom";
-import { fetchGamesDetails } from "../../service/games"; // Asegúrate de importar la función correctamente
+import { useLoaderData, Link } from "react-router-dom";
+import { fetchGamesDetails } from "../../service/games"; 
 
 export async function loader({ params }) {
   return { id: params.id };
@@ -64,16 +64,18 @@ export default function GamesDetails() {
                 </p>
               </div>
 
+              {/* Géneros clickeables */}
               <div>
                 <p className="font-bold text-green-400 mb-2">Géneros:</p>
                 <ul className="flex flex-wrap gap-2">
                   {game.genres.map((genre) => (
-                    <li
-                      key={genre.id}
+                    <Link 
+                      key={genre.id} 
+                      to={`/genres/${genre.slug}`} 
                       className="px-4 py-1 rounded-full bg-gray-800 text-gray-300 text-sm font-medium hover:bg-green-500 hover:text-black transition-all duration-200"
                     >
                       {genre.name}
-                    </li>
+                    </Link>
                   ))}
                 </ul>
               </div>
@@ -106,16 +108,18 @@ export default function GamesDetails() {
                 </ul>
               </div>
 
+              {/* Tags clickeables */}
               <div>
                 <p className="font-bold text-green-400 mb-2">Tags:</p>
                 <ul className="flex flex-wrap gap-2">
                   {game.tags.map((tag) => (
-                    <li
-                      key={tag.id}
+                    <Link 
+                      key={tag.id} 
+                      to={`/tags/${tag.slug}`} 
                       className="px-4 py-1 rounded-full bg-gray-700 text-gray-300 text-sm font-medium hover:bg-green-500 hover:text-black transition-all duration-200"
                     >
                       {tag.name}
-                    </li>
+                    </Link>
                   ))}
                 </ul>
               </div>

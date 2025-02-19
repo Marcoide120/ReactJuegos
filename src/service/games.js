@@ -47,3 +47,16 @@ export const fetchGamesDetails = async (id, setGame, setLoading) => {
         setLoading(false);
     }
 };
+
+export const fetchTagsById = async (id) => {
+    try {
+        const response = await fetch(`https://api.rawg.io/api/tags/${id}?key=${API_KEY}`);
+        if (!response.ok) throw new Error("Error al obtener los detalles del tag");
+
+        const data = await response.json();
+        return data; // Retornamos los datos del tag
+    } catch (error) {
+        alert("Error:", error);
+        return null; // En caso de error, retornamos null
+    }
+};

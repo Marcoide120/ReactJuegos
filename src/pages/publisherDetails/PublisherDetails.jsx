@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { fetchPublisherById } from "../../service/publishers";
 
 export async function loader({ params }) {
-  return { id: params.id };  // Cargamos el id desde la URL
+  return { id: params.id }; // Cargamos el ID desde la URL
 }
 
 const PublisherDetails = () => {
@@ -16,7 +16,7 @@ const PublisherDetails = () => {
     const loadPublisher = async () => {
       setLoading(true);
       try {
-        const data = await fetchPublisherById(id);  // Usamos el id para obtener los detalles
+        const data = await fetchPublisherById(id); // Obtener datos del publisher
         setPublisher(data);
       } catch (err) {
         setError("Error al obtener información del publisher");
@@ -35,13 +35,30 @@ const PublisherDetails = () => {
   }
 
   return (
-    <section className="p-5">
-      <div className="max-w-3xl mx-auto bg-gray-900 p-6 rounded-3xl shadow-xl">
-        <h1 className="text-4xl font-extrabold text-green-500 mb-4">{publisher.name}</h1>
-        <p className="text-gray-400 text-lg mb-4">Juegos publicados: {publisher.games_count}</p>
-        <p className="text-gray-300 text-md">{publisher.description || "No hay descripción disponible."}</p>
+    <div className="min-h-screen bg-gray-800 text-white">
+  <div className="container mx-auto p-6">
+    <div className="flex flex-col lg:flex-row gap-10 items-start">
+      <div className="flex-1">
+        <h1 className="text-4xl font-extrabold text-green-400 mb-4">
+          {publisher.name}
+        </h1>
+
+        <p className="text-lg text-gray-400 mb-4">
+          <span className="font-bold text-green-400">Juegos publicados:</span>{" "}
+          {publisher.games_count}
+        </p>
+
+        
+        <p className="text-base leading-relaxed text-gray-300 mb-6">
+          {publisher.description
+            ? publisher.description.replace(/<[^>]*>/g, "") // Elimina etiquetas HTML
+            : "No hay descripción disponible."}
+        </p>
       </div>
-    </section>
+    </div>
+  </div>
+</div>
+
   );
 };
 

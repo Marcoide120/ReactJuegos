@@ -66,14 +66,16 @@ const Publishers = () => {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {publishers.length > 0 ? (
               publishers.map((publisher) => (
-                <div key={publisher.id} className="bg-gray-900 rounded-3xl overflow-hidden shadow-xl p-6">
-                  <Link to={`/PublisherDetails/${publisher.id}`} className="text-green-500 hover:underline">
-                    <h3 className="text-xl font-semibold text-white mb-4 truncate">
-                      {publisher.name}
-                    </h3>
-                  </Link>
+                <Link 
+                  key={publisher.id} 
+                  to={`/PublisherDetails/${publisher.id}`} 
+                  className="bg-gray-900 rounded-3xl overflow-hidden shadow-xl p-6 block hover:bg-gray-800 transition-all duration-200"
+                >
+                  <h3 className="text-xl font-semibold text-white mb-4 truncate">
+                    {publisher.name}
+                  </h3>
                   <p className="text-gray-400">Juegos publicados: {publisher.games_count}</p>
-                </div>
+                </Link>
               ))
             ) : (
               <p className="text-center text-gray-400 text-lg">No se encontraron publishers.</p>

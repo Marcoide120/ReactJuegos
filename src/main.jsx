@@ -34,7 +34,7 @@ const router = createBrowserRouter([
       { path: "/Games", element: <Games /> },
       { path: "/GamesDetails/:id", element: <GamesDetails />, loader: gameLoader },
       { path: "/Publisher", element: <Publishers /> },
-      { path: "/PublisherDetails/:id", element: <PublisherDetails />, loader: publisherLoader }, // Añadido el loader para PublisherDetails
+      { path: "/PublisherDetails/:id", element: <PublisherDetails />, loader: publisherLoader },
     ],
   },
 ]);

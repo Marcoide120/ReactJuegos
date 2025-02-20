@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLoaderData, Link } from "react-router-dom";
-import { fetchGamesDetails } from "../../service/games"; 
+import { fetchGamesDetails } from "../../service/games";
 
 export async function loader({ params }) {
   return { id: params.id };
@@ -45,7 +45,7 @@ export default function GamesDetails() {
 
           <div className="flex-1">
             <h1 className="text-4xl font-extrabold text-green-400 mb-4">{game.name}</h1>
-            
+
             {game.description_raw ? (
               <p className="text-base leading-relaxed text-gray-300 mb-6">{game.description_raw}</p>
             ) : (
@@ -124,6 +124,7 @@ export default function GamesDetails() {
                 </ul>
               </div>
             </div>
+
           </div>
         </div>
       </div>

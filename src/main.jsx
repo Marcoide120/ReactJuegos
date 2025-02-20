@@ -10,9 +10,10 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home/Home";
 import Publishers from "./pages/publisher/publisher";
-import PublisherDetails, { loader as publisherLoader } from "./pages/publisherDetails/publisherDetails"; // Corregido el nombre del componente
+import PublisherDetails, { loader as publisherLoader } from "./pages/publisherDetails/PublisherDetails";
 import Games from "./pages/videogames/Games";
 import GamesDetails, { loader as gameLoader } from "./pages/GamesDetails/GamesDetails";
+import TagDetails from "./pages/tags/Tags";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 function AppLayout() {
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
       { path: "/GamesDetails/:id", element: <GamesDetails />, loader: gameLoader },
       { path: "/Publisher", element: <Publishers /> },
       { path: "/PublisherDetails/:id", element: <PublisherDetails />, loader: publisherLoader },
+      { path: "/tags/:slug", element: <TagDetails /> }, // Usamos `slug` en la URL
     ],
   },
 ]);
@@ -44,4 +46,3 @@ createRoot(document.getElementById("root")).render(
     <RouterProvider router={router} />
   </StrictMode>
 );
-

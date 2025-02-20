@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchTagsById } from "../../service/tags"; // Asumiendo que tienes una función para obtener los tags
-
-export async function loader({ params }) {
-  return { id: params.id }; // Cargamos el ID desde la URL
-}
+import { fetchTagsBySlug } from "../../service/games"; 
 
 const TagDetails = () => {
-  const { id } = useParams();
+  const { slug } = useParams(); // Usamos `slug` en lugar de `id`
   const [tag, setTag] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,7 +12,8 @@ const TagDetails = () => {
     const loadTag = async () => {
       setLoading(true);
       try {
-        const data = await fetchTagsById(id); // Obtener datos del tag
+        const data = await fetchTagsBySlug(slug); // Ahora usamos `slug`
+        if (!data) throw new Error();
         setTag(data);
       } catch (err) {
         setError("Error al obtener información del tag");
@@ -24,7 +21,7 @@ const TagDetails = () => {
       setLoading(false);
     };
     loadTag();
-  }, [id]);
+  }, [slug]);
 
   if (isLoading) {
     return <p className="text-center text-green-600 text-xl">Cargando...</p>;
@@ -53,18 +50,23 @@ const TagDetails = () => {
               {tag.games_count || 0}
             </p>
 
+            {/* 🚀 Sección de Juegos Relacionados */}
             <div>
               <p className="font-bold text-green-400 mb-2">Juegos relacionados:</p>
-              <ul className="flex flex-wrap gap-2">
-                {tag.games.map((game) => (
-                  <li
-                    key={game.id}
-                    className="px-4 py-1 rounded-full bg-gray-700 text-gray-300 text-sm font-medium hover:bg-green-500 hover:text-black transition-all duration-200"
-                  >
-                    {game.name}
-                  </li>
-                ))}
-              </ul>
+              {tag.games && tag.games.length > 0 ? (
+                <ul className="flex flex-wrap gap-2">
+                  {tag.games.map((game) => (
+                    <li
+                      key={game.id}
+                      className="px-4 py-1 rounded-full bg-gray-700 text-gray-300 text-sm font-medium hover:bg-green-500 hover:text-black transition-all duration-200"
+                    >
+                      {game.name}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-400">No hay juegos relacionados.</p>
+              )}
             </div>
           </div>
         </div>

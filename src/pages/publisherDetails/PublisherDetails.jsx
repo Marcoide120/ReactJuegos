@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { fetchPublisherById } from "../../service/publishers";
 
 export async function loader({ params }) {
-  return { id: params.id }; // Cargamos el ID desde la URL
+  return { id: params.id };
 }
 
 const PublisherDetails = () => {
@@ -16,7 +16,7 @@ const PublisherDetails = () => {
     const loadPublisher = async () => {
       setLoading(true);
       try {
-        const data = await fetchPublisherById(id); // Obtener datos del publisher
+        const data = await fetchPublisherById(id);
         setPublisher(data);
       } catch (err) {
         setError("Error al obtener información del publisher");
@@ -51,7 +51,7 @@ const PublisherDetails = () => {
         
         <p className="text-base leading-relaxed text-gray-300 mb-6">
           {publisher.description
-            ? publisher.description.replace(/<[^>]*>/g, "") // Elimina etiquetas HTML
+            ? publisher.description.replace(/<[^>]*>/g, "")
             : "No hay descripción disponible."}
         </p>
       </div>

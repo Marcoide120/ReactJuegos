@@ -64,7 +64,6 @@ export default function GamesDetails() {
                 </p>
               </div>
 
-              {/* Géneros clickeables */}
               <div>
                 <p className="font-bold text-green-400 mb-2">Géneros:</p>
                 <ul className="flex flex-wrap gap-2">
@@ -80,7 +79,6 @@ export default function GamesDetails() {
                 </ul>
               </div>
 
-              {/* Plataformas */}
               <div>
                 <p className="font-bold text-green-400 mb-2">Plataformas:</p>
                 <ul className="flex flex-wrap gap-2">
@@ -95,7 +93,6 @@ export default function GamesDetails() {
                 </ul>
               </div>
 
-              {/* Publishers clickeables */}
               <div>
                 <p className="font-bold text-green-400 mb-2">Publisher:</p>
                 <ul className="flex flex-wrap gap-2">
@@ -111,7 +108,6 @@ export default function GamesDetails() {
                 </ul>
               </div>
 
-              {/* Tags clickeables */}
               <div>
                 <p className="font-bold text-green-400 mb-2">Tags:</p>
                 <ul className="flex flex-wrap gap-2">

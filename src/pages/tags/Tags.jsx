@@ -45,7 +45,6 @@ const TagDetails = () => {
               {tag.games_count || 0}
             </p>
 
-            {/* 🚀 Sección de Juegos Relacionados */}
             <div>
               <p className="font-bold text-green-400 mb-2">Juegos relacionados:</p>
               {tag.games && tag.games.length > 0 ? (

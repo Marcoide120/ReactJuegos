@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { fetchTagsBySlug } from "../../service/games"; 
 
 const TagDetails = () => {
-  const { slug } = useParams(); // Usamos `slug` en lugar de `id`
+  const { slug } = useParams();
   const [tag, setTag] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,7 +12,7 @@ const TagDetails = () => {
     const loadTag = async () => {
       setLoading(true);
       try {
-        const data = await fetchTagsBySlug(slug); // Ahora usamos `slug`
+        const data = await fetchTagsBySlug(slug);
         if (!data) throw new Error();
         setTag(data);
       } catch (err) {
@@ -39,11 +39,6 @@ const TagDetails = () => {
             <h1 className="text-4xl font-extrabold text-green-400 mb-4">
               {tag.name}
             </h1>
-
-            <p className="text-lg text-gray-400 mb-4">
-              <span className="font-bold text-green-400">Descripción:</span>{" "}
-              {tag.description || "No hay descripción disponible."}
-            </p>
 
             <p className="text-lg text-gray-400 mb-4">
               <span className="font-bold text-green-400">Cantidad de juegos:</span>{" "}

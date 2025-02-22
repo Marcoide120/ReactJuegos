@@ -67,3 +67,16 @@ export const fetchTagsBySlug = async (slug) => {
         return null;
     }
 };
+
+export const fetchGenres = async () => {
+    try {
+        const response = await fetch(`https://api.rawg.io/api/genres?key=${API_KEY}`);
+        if (!response.ok) throw new Error("Error al obtener los géneros");
+
+        const data = await response.json();
+        return data.results || [];
+    } catch (error) {
+        console.error("Error:", error);
+        return [];
+    }
+};

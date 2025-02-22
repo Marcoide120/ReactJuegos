@@ -14,6 +14,7 @@ import PublisherDetails, { loader as publisherLoader } from "./pages/publisherDe
 import Games from "./pages/videogames/Games";
 import GamesDetails, { loader as gameLoader } from "./pages/GamesDetails/GamesDetails";
 import TagDetails from "./pages/tags/Tags";
+import GenreDetails from "./pages/generos/Genero"; // Importamos la nueva página
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 function AppLayout() {
@@ -36,7 +37,8 @@ const router = createBrowserRouter([
       { path: "/GamesDetails/:id", element: <GamesDetails />, loader: gameLoader },
       { path: "/Publisher", element: <Publishers /> },
       { path: "/PublisherDetails/:id", element: <PublisherDetails />, loader: publisherLoader },
-      { path: "/tags/:slug", element: <TagDetails /> }, // Usamos `slug` en la URL
+      { path: "/tags/:slug", element: <TagDetails /> },
+      { path: "/genres/:slug", element: <GenreDetails /> }, // Nueva ruta para los géneros
     ],
   },
 ]);

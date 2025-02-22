@@ -13,8 +13,8 @@ import Publishers from "./pages/publisher/publisher";
 import PublisherDetails, { loader as publisherLoader } from "./pages/publisherDetails/PublisherDetails";
 import Games from "./pages/videogames/Games";
 import GamesDetails, { loader as gameLoader } from "./pages/GamesDetails/GamesDetails";
+import GenreDetails from "./pages/generos/Genero";
 import TagDetails from "./pages/tags/Tags";
-import GenreDetails from "./pages/generos/Genero"; // Importamos la nueva página
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 function AppLayout() {
@@ -36,9 +36,9 @@ const router = createBrowserRouter([
       { path: "/Games", element: <Games /> },
       { path: "/GamesDetails/:id", element: <GamesDetails />, loader: gameLoader },
       { path: "/Publisher", element: <Publishers /> },
-      { path: "/PublisherDetails/:id", element: <PublisherDetails />, loader: publisherLoader },
+      { path: "/publishers/:id", element: <PublisherDetails />, loader: publisherLoader },
+      { path: "/genres/:slug", element: <GenreDetails /> }, 
       { path: "/tags/:slug", element: <TagDetails /> },
-      { path: "/genres/:slug", element: <GenreDetails /> }, // Nueva ruta para los géneros
     ],
   },
 ]);

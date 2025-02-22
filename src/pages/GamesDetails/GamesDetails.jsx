@@ -80,6 +80,7 @@ export default function GamesDetails() {
                 </ul>
               </div>
 
+              {/* Plataformas */}
               <div>
                 <p className="font-bold text-green-400 mb-2">Plataformas:</p>
                 <ul className="flex flex-wrap gap-2">
@@ -94,16 +95,18 @@ export default function GamesDetails() {
                 </ul>
               </div>
 
+              {/* Publishers clickeables */}
               <div>
                 <p className="font-bold text-green-400 mb-2">Publisher:</p>
                 <ul className="flex flex-wrap gap-2">
                   {game.publishers.map((publisher) => (
-                    <li
-                      key={publisher.id}
+                    <Link 
+                      key={publisher.id} 
+                      to={`/publishers/${publisher.id}`} 
                       className="px-4 py-1 rounded-full bg-gray-800 text-gray-300 text-sm font-medium hover:bg-green-500 hover:text-black transition-all duration-200"
                     >
                       {publisher.name}
-                    </li>
+                    </Link>
                   ))}
                 </ul>
               </div>
@@ -123,8 +126,8 @@ export default function GamesDetails() {
                   ))}
                 </ul>
               </div>
-            </div>
 
+            </div>
           </div>
         </div>
       </div>

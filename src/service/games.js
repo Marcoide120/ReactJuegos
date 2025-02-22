@@ -80,3 +80,16 @@ export const fetchGenres = async () => {
         return [];
     }
 };
+
+export const fetchPublisherById = async (id) => {
+    try {
+        const response = await fetch(`https://api.rawg.io/api/publishers/${id}?key=${API_KEY}`);
+        if (!response.ok) throw new Error("Error al obtener los detalles del publisher");
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+};

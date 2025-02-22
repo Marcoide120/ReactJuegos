@@ -9,7 +9,7 @@ import "./index.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home/Home";
-import Publishers from "./pages/publisher/publisher";
+import Publishers from "./pages/publisher/Publisher";
 import PublisherDetails, { loader as publisherLoader } from "./pages/publisherDetails/PublisherDetails";
 import Games from "./pages/videogames/Games";
 import GamesDetails, { loader as gameLoader } from "./pages/GamesDetails/GamesDetails";

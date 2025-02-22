@@ -36,29 +36,27 @@ const PublisherDetails = () => {
 
   return (
     <div className="min-h-screen bg-gray-800 text-white">
-  <div className="container mx-auto p-6">
-    <div className="flex flex-col lg:flex-row gap-10 items-start">
-      <div className="flex-1">
-        <h1 className="text-4xl font-extrabold text-green-400 mb-4">
-          {publisher.name}
-        </h1>
+      <div className="container mx-auto p-6">
+        <div className="flex flex-col lg:flex-row gap-10 items-start">
+          <div className="flex-1">
+            <h1 className="text-4xl font-extrabold text-green-400 mb-4">
+              {publisher.name}
+            </h1>
 
-        <p className="text-lg text-gray-400 mb-4">
-          <span className="font-bold text-green-400">Juegos publicados:</span>{" "}
-          {publisher.games_count}
-        </p>
+            <p className="text-lg text-gray-400 mb-4">
+              <span className="font-bold text-green-400">Juegos publicados:</span>{" "}
+              {publisher.games_count}
+            </p>
 
-        
-        <p className="text-base leading-relaxed text-gray-300 mb-6">
-          {publisher.description
-            ? publisher.description.replace(/<[^>]*>/g, "")
-            : "No hay descripción disponible."}
-        </p>
+            <p className="text-base leading-relaxed text-gray-300 mb-6">
+              {publisher.description
+                ? publisher.description.replace(/<[^>]*>/g, "")
+                : "No hay descripción disponible."}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-
   );
 };
 

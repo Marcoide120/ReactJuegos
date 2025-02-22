@@ -68,7 +68,7 @@ const Publishers = () => {
               publishers.map((publisher) => (
                 <Link 
                   key={publisher.id} 
-                  to={`/PublisherDetails/${publisher.id}`} 
+                  to={`/publishers/${publisher.id}`}
                   className="bg-gray-900 rounded-3xl overflow-hidden shadow-xl p-6 block hover:bg-gray-800 transition-all duration-200"
                 >
                   <h3 className="text-xl font-semibold text-white mb-4 truncate">

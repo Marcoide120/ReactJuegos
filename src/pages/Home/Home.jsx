@@ -50,7 +50,10 @@ function Home() {
                             La Juegoteca virtual
                         </h1>
                         <p className="mx-auto max-w-[700px] text-gray-200 md:text-xl">
-                            La mejor información sobre videojuegos
+                            La mejor información sobre videojuegos. Actuales, indi, 8-bits, etc.
+                        </p>
+                        <p className="mx-auto max-w-[700px] text-gray-200 md:text-xl">
+                        Si quieres buscar algún juego este es tu sitio.
                         </p>
                     </div>
                     <div className="space-x-4 mt-4">

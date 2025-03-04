@@ -44,7 +44,7 @@ const Publishers = () => {
   };
 
   return (
-    <section className="p-5">
+    <section className=" bg-gray-600 p-5">
       <div className="flex justify-center items-center gap-6 mb-6">
         <h1 className="font-rubiksh text-green-600 font-extrabold text-4xl">
           Biblioteca de Publishers

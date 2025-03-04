@@ -1,77 +1,150 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { fetchGenres } from "../../service/games";
+"use client"
+
+import { useEffect, useState } from "react"
+import { useParams, useNavigate } from "react-router-dom"
+import { fetchGenreGames } from "../../service/games"
 
 export default function GenreDetails() {
-  const { slug } = useParams(); // Obtén el slug de la URL
-  const [genre, setGenre] = useState(null); // Detalles del género específico
-  const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { slug } = useParams()
+  const navigate = useNavigate()
+  const [genre, setGenre] = useState(null)
+  const [isLoading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [isLoadingGames, setIsLoadingGames] = useState(false)
 
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
+    const loadGenreData = async () => {
+      setLoading(true)
       try {
-        // Obtén la lista de todos los géneros
-        const allGenres = await fetchGenres();
-
-        // Busca el género específico usando el slug
-        const selectedGenre = allGenres.find((g) => g.slug === slug);
-
-        if (!selectedGenre) {
-          throw new Error("No se encontró el género");
-        }
-
-        // Guarda el género seleccionado
-        setGenre(selectedGenre);
+        await loadGames(1)
       } catch (err) {
-        setError("Error al obtener información del género");
+        setError("Error al obtener información del género")
       }
-      setLoading(false);
-    };
-    loadData();
-  }, [slug]);
+      setLoading(false)
+    }
+    loadGenreData()
+  }, []) // Removed slug from dependencies
+
+  const loadGames = async (page) => {
+    setIsLoadingGames(true)
+    try {
+      const data = await fetchGenreGames(slug, page)
+      if (!data) throw new Error("No se pudo cargar la información del género")
+
+      setGenre(data)
+      setTotalPages(data.totalPages || 1)
+      setCurrentPage(page)
+    } catch (err) {
+      console.error("Error al cargar juegos:", err)
+      setError("Error al obtener información del género")
+    }
+    setIsLoadingGames(false)
+  }
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      loadGames(newPage)
+      // Scroll al inicio de la sección de juegos
+      document.getElementById("games-section")?.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
+  const handleGameClick = (gameId) => {
+    navigate(`/GamesDetails/${gameId}`)
+  }
 
   if (isLoading) {
-    return <p className="text-center text-green-600 text-xl">Cargando...</p>;
+    return <p className="text-center text-green-600 text-xl">Cargando...</p>
   }
 
   if (error) {
-    return <p className="text-center text-red-600 text-xl">{error}</p>;
+    return <p className="text-center text-red-600 text-xl">{error}</p>
   }
 
   if (!genre) {
-    return <p className="text-center text-red-600 text-xl">No se encontró el género.</p>;
+    return <p className="text-center text-red-600 text-xl">No se encontró el género.</p>
   }
 
   return (
     <div className="min-h-screen bg-gray-800 text-white">
       <div className="container mx-auto p-6">
-        <div className="flex flex-col lg:flex-row gap-10 items-start">
-          {/* Detalles del género */}
-          <div className="flex-1">
-            <h1 className="text-4xl font-extrabold text-green-400 mb-4">
-              {genre.name}
-            </h1>
+        <div className="flex flex-col gap-10">
+          <div>
+            <h1 className="text-4xl font-extrabold text-green-400 mb-4">{genre.name}</h1>
 
-            {/* Cantidad de juegos */}
-            <p className="font-bold text-green-400 mb-2">Cantidad de juegos:</p>
-            <p className="text-gray-400">{genre.games_count || 0}</p>
+            {genre.description && (
+              <div className="mb-8">
+                <p className="text-base leading-relaxed text-gray-300">{genre.description.replace(/<[^>]*>/g, "")}</p>
+              </div>
+            )}
 
-            {/* Lista de juegos en este género */}
-            <div>
-              <p className="font-bold text-green-400 mb-2">Juegos en este género:</p>
-              {genre.games && genre.games.length > 0 ? (
-                <ul className="flex flex-wrap gap-2">
-                  {genre.games.map((game) => (
-                    <li
-                      key={game.id}
-                      className="px-4 py-1 rounded-full bg-gray-700 text-gray-300 text-sm font-medium hover:bg-green-500 hover:text-black transition-all duration-200"
-                    >
-                      {game.name}
-                    </li>
-                  ))}
-                </ul>
+            <div id="games-section" className="mt-8">
+              <h2 className="text-2xl font-bold text-green-400 mb-4">Juegos en este género:</h2>
+
+              {isLoadingGames ? (
+                <p className="text-center text-green-600 text-xl">Cargando juegos...</p>
+              ) : genre.games && genre.games.length > 0 ? (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {genre.games.map((game) => (
+                      <div
+                        key={game.id}
+                        className="bg-gray-700 rounded-lg overflow-hidden shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105"
+                        onClick={() => handleGameClick(game.id)}
+                      >
+                        {game.background_image && (
+                          <img
+                            src={game.background_image || "/placeholder.svg"}
+                            alt={game.name}
+                            className="w-full h-40 object-cover"
+                          />
+                        )}
+                        <div className="p-4">
+                          <h3 className="text-lg font-semibold text-green-300">{game.name}</h3>
+                          <p className="text-sm text-gray-400">Lanzamiento: {game.released || "Desconocido"}</p>
+                          <p className="text-sm text-gray-400">Rating: {game.rating || "N/A"}/5</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Paginación */}
+                  {totalPages > 1 && (
+                    <div className="flex justify-center mt-8">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handlePageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          className={`px-4 py-2 rounded ${
+                            currentPage === 1
+                              ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                              : "bg-green-600 text-white hover:bg-green-700"
+                          }`}
+                        >
+                          Anterior
+                        </button>
+
+                        <span className="text-gray-300">
+                          Página {currentPage} de {totalPages}
+                        </span>
+
+                        <button
+                          onClick={() => handlePageChange(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                          className={`px-4 py-2 rounded ${
+                            currentPage === totalPages
+                              ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                              : "bg-green-600 text-white hover:bg-green-700"
+                          }`}
+                        >
+                          Siguiente
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </>
               ) : (
                 <p className="text-gray-400">No hay juegos disponibles en este género.</p>
               )}
@@ -80,5 +153,6 @@ export default function GenreDetails() {
         </div>
       </div>
     </div>
-  );
+  )
 }
+

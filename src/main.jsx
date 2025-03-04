@@ -16,6 +16,8 @@ import GamesDetails, { loader as gameLoader } from "./pages/GamesDetails/GamesDe
 import GenreDetails from "./pages/generos/Genero";
 import TagDetails from "./pages/tags/Tags";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import store from './app/store'
+import { Provider } from "react-redux";
 
 function AppLayout() {
   return (
@@ -45,6 +47,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    <Provider store = {store}>
+
     <RouterProvider router={router} />
+    </Provider>
+    
   </StrictMode>
 );

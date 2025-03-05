@@ -35,7 +35,6 @@ export const fetchPublisherById = async (id) => {
 
 export const fetchPublisherGames = async (id, page = 1) => {
   try {
-    // Aumenté el page_size a 12 para mostrar más juegos por página
     const url = `https://api.rawg.io/api/games?key=${API_KEY}&publishers=${id}&page_size=12&page=${page}`
     const response = await fetch(url)
     if (!response.ok) throw new Error("Error al obtener los juegos del publisher")

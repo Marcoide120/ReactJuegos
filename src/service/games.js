@@ -1,130 +1,59 @@
 const API_KEY = "b2685e103fb743d09dc5325f1174937d"
+const BASE_URL = "https://api.rawg.io/api"
 
-export const fetchPopularGames = async (setGames, setIsLoading) => {
-  try {
-    const response = await fetch(`https://api.rawg.io/api/games?key=${API_KEY}&page_size=10`)
-    const data = await response.json()
-    setGames(data.results)
-    setIsLoading(false)
-  } catch (error) {
-    alert("Error fetching games:", error)
-    setIsLoading(false)
-  }
+export const fetchPopularGames = async () => {
+  const response = await fetch(`${BASE_URL}/games?key=${API_KEY}&ordering=-metacritic&page_size=10`)
+  const data = await response.json()
+  return data.results
 }
 
-export const fetchAllGames = async (query = "", page = 1) => {
-  try {
-    let url = `https://api.rawg.io/api/games?key=${API_KEY}&page_size=40&page=${page}`
-    if (query) {
-      url += `&search=${query}`
-    }
-
-    const response = await fetch(url)
-    if (!response.ok) throw new Error("Error al obtener los juegos")
-
-    const data = await response.json()
-    return {
-      results: data.results || [],
-      totalPages: Math.ceil(data.count / 40),
-    }
-  } catch (error) {
-    alert("Error:", error)
-    return { results: [], totalPages: 0 }
-  }
+export const fetchGames = async (page = 1) => {
+  const response = await fetch(`${BASE_URL}/games?key=${API_KEY}&page=${page}&page_size=20`)
+  return await response.json()
 }
 
-export const fetchGamesDetails = async (id, setGame, setLoading) => {
-  try {
-    const response = await fetch(`https://api.rawg.io/api/games/${id}?key=${API_KEY}`)
-    if (!response.ok) throw new Error("Error al obtener los detalles del juego")
-
-    const data = await response.json()
-    setGame(data)
-  } catch (error) {
-    alert("Error:", error)
-    setGame(null)
-  } finally {
-    setLoading(false)
-  }
+export const searchGames = async (searchTerm, page = 1) => {
+  const response = await fetch(`${BASE_URL}/games?key=${API_KEY}&search=${searchTerm}&page=${page}&page_size=20`)
+  return await response.json()
 }
 
-// Obtenemos los juegos relacionados con el tag con paginación
-export const fetchTagsBySlug = async (slug, page = 1) => {
-  try {
-    // Obtener información del tag
-    const tagResponse = await fetch(`https://api.rawg.io/api/tags/${slug}?key=${API_KEY}`)
-    if (!tagResponse.ok) throw new Error("Error al obtener los detalles del tag")
-    const tagData = await tagResponse.json()
-
-    // Obtener juegos relacionados con el tag (ahora con paginación)
-    const gamesResponse = await fetch(
-      `https://api.rawg.io/api/games?key=${API_KEY}&tags=${slug}&page_size=12&page=${page}`,
-    )
-    if (!gamesResponse.ok) throw new Error("Error al obtener los juegos del tag")
-    const gamesData = await gamesResponse.json()
-
-    return {
-      ...tagData,
-      games: gamesData.results || [],
-      totalPages: Math.ceil(gamesData.count / 12),
-      currentPage: page,
-    }
-  } catch (error) {
-    console.error("Error:", error)
-    return null
-  }
+export const fetchGameDetails = async (id) => {
+  const response = await fetch(`${BASE_URL}/games/${id}?key=${API_KEY}`)
+  return await response.json()
 }
 
-// Nueva función para obtener juegos por género con paginación
-export const fetchGenreGames = async (slug, page = 1) => {
-  try {
-    // Obtener información del género
-    const genreResponse = await fetch(`https://api.rawg.io/api/genres/${slug}?key=${API_KEY}`)
-    if (!genreResponse.ok) throw new Error("Error al obtener los detalles del género")
-    const genreData = await genreResponse.json()
-
-    // Obtener juegos del género con paginación
-    const gamesResponse = await fetch(
-      `https://api.rawg.io/api/games?key=${API_KEY}&genres=${slug}&page_size=12&page=${page}`,
-    )
-    if (!gamesResponse.ok) throw new Error("Error al obtener los juegos del género")
-    const gamesData = await gamesResponse.json()
-
-    return {
-      ...genreData,
-      games: gamesData.results || [],
-      totalPages: Math.ceil(gamesData.count / 12),
-      currentPage: page,
-    }
-  } catch (error) {
-    console.error("Error:", error)
-    return null
-  }
+export const fetchGamesByTagOrGenre = async (type, id, page = 1) => {
+  const response = await fetch(`${BASE_URL}/games?key=${API_KEY}&${type}s=${id}&page=${page}&page_size=20`)
+  return await response.json()
 }
 
-export const fetchGenres = async () => {
-  try {
-    const response = await fetch(`https://api.rawg.io/api/genres?key=${API_KEY}`)
-    if (!response.ok) throw new Error("Error al obtener los géneros")
-
-    const data = await response.json()
-    return data.results || []
-  } catch (error) {
-    console.error("Error:", error)
-    return []
-  }
+export const fetchPublisherDetails = async (id) => {
+  const response = await fetch(`${BASE_URL}/publishers/${id}?key=${API_KEY}`)
+  return await response.json()
 }
 
-export const fetchPublisherById = async (id) => {
-  try {
-    const response = await fetch(`https://api.rawg.io/api/publishers/${id}?key=${API_KEY}`)
-    if (!response.ok) throw new Error("Error al obtener los detalles del publisher")
+export const fetchPublisherGames = async (id, page = 1) => {
+  const response = await fetch(`${BASE_URL}/games?key=${API_KEY}&publishers=${id}&page=${page}&page_size=20`)
+  return await response.json()
+}
 
-    const data = await response.json()
-    return data
-  } catch (error) {
-    console.error("Error:", error)
-    return null
-  }
+export const fetchPublishers = async (page = 1) => {
+  const response = await fetch(`${BASE_URL}/publishers?key=${API_KEY}&page=${page}&page_size=20`)
+  return await response.json()
+}
+
+export const searchPublishers = async (searchTerm, page = 1) => {
+  const response = await fetch(`${BASE_URL}/publishers?key=${API_KEY}&search=${searchTerm}&page=${page}&page_size=20`)
+  return await response.json()
+}
+
+export const fetchTags = async (page = 1) => {
+  const response = await fetch(`${BASE_URL}/tags?key=${API_KEY}&page=${page}&page_size=20`)
+  return await response.json()
+}
+
+export const searchTags = async (searchTerm, page = 1) => {
+  const response = await fetch(`${BASE_URL}/tags?key=${API_KEY}&search=${searchTerm}&page=${page}&page_size=20`)
+  return await response.json()
 }
 

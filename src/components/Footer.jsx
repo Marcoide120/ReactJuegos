@@ -3,14 +3,24 @@ import React from "react";
 const Footer = () => {
   return (
     <>
-      <footer className="w-full bg-gray-900 bg-opacity-80 backdrop-blur-md border-t border-gray-700 shadow-lg rounded-t-lg">
-  <div className="w-full mx-auto p-6 text-center">
-    <hr className="my-6 border-gray-600 sm:mx-auto" />
-    <span className="block text-sm text-gray-400 tracking-wide">
-      © 2023 La juegoteca virtual . Todos los derechos reservados.
-    </span>
-  </div>
-</footer>
+      <footer
+        style={{
+          width: "102%",
+          backgroundColor: "#111827",
+          backdropFilter: "blur(10px)",
+          borderTop: "1px solid #374151",
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          borderTopLeftRadius: "0.5rem",
+          borderTopRightRadius: "0.5rem",
+        }}
+      >
+        <div style={{ width: "98%", margin: "0 auto", padding: "1.5rem", textAlign: "center" }}>
+          <hr style={{ margin: "1.5rem 0", borderColor: "#4B5563" }} />
+          <span style={{ display: "block", fontSize: "0.875rem", color: "#9CA3AF", letterSpacing: "0.05em" }}>
+            © 2023 La Juegoteca Virtual. Todos los derechos reservados.
+          </span>
+        </div>
+      </footer>
     </>
   );
 };

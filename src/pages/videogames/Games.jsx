@@ -1,134 +1,220 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { fetchAllGames } from "../../service/games";
+"use client"
+
+import { useState, useEffect } from "react"
+import { fetchGames, searchGames } from "../../service/games"
+import GamesPoster from "../../components/GamesPoster"
+import Pagination from "../../components/Pagination"
 
 const Games = () => {
-    const [games, setGames] = useState([]);
-    const [isLoading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [timeoutId, setTimeoutId] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+  const [games, setGames] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
+  const [windowWidth, setWindowWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1200)
 
-    useEffect(() => {
-        const loadGames = async () => {
-            setLoading(true);
-            const { results, totalPages } = await fetchAllGames("", currentPage);
-            setGames(results);
-            setTotalPages(totalPages);
-            setLoading(false);
-        };
-        loadGames();
-    }, [currentPage]);
-
-    useEffect(() => {
-        if (timeoutId) clearTimeout(timeoutId);
-
-        const newTimeoutId = setTimeout(async () => {
-            setLoading(true);
-            const { results, totalPages } = await fetchAllGames(searchTerm, currentPage);
-            setGames(results);
-            setTotalPages(totalPages);
-            setLoading(false);
-        }, 500);
-
-        setTimeoutId(newTimeoutId);
-
-        return () => clearTimeout(newTimeoutId);
-    }, [searchTerm, currentPage]);
-
-    const handlePageChange = (newPage) => {
-        if (newPage >= 1 && newPage <= totalPages) {
-            setCurrentPage(newPage);
+  useEffect(() => {
+    const loadGames = async () => {
+      try {
+        setIsLoading(true)
+        const result = await fetchGames(currentPage)
+        // Asegurarse de que result.results es un array
+        if (Array.isArray(result.results)) {
+          setGames(result.results)
+          setTotalPages(Math.ceil(result.count / 20))
+        } else {
+          console.error("Los datos recibidos no tienen el formato esperado:", result)
+          setGames([])
+          setTotalPages(0)
         }
-    };
+      } catch (error) {
+        console.error("Error al cargar los juegos:", error)
+        setGames([])
+        setTotalPages(0)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    loadGames()
+  }, [currentPage])
 
-    return (
-        <section className=" bg-gray-600 p-5">
-            <div className="flex justify-center items-center gap-6 mb-6">
-                <h1 className="font-rubiksh text-green-600 font-extrabold text-4xl">
-                    Biblioteca de juegos
-                </h1>
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth)
+    }
 
-                <input
-                    type="text"
-                    placeholder="Buscar juegos..."
-                    className="px-5 py-3 w-80 text-lg rounded-full border-2 border-green-500 bg-gray-800 text-white focus:outline-none focus:ring-4 focus:ring-green-400 transition-all duration-200"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
+    window.addEventListener("resize", handleResize)
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
+
+  const handleSearch = async (e) => {
+    e.preventDefault()
+    if (searchTerm) {
+      try {
+        setIsLoading(true)
+        const result = await searchGames(searchTerm, 1)
+        if (Array.isArray(result.results)) {
+          setGames(result.results)
+          setTotalPages(Math.ceil(result.count / 20))
+        }
+        setCurrentPage(1)
+      } catch (error) {
+        console.error("Error en la búsqueda:", error)
+        setGames([])
+        setTotalPages(0)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+  }
+
+  // Calculate columns based on screen width
+  const getColumnCount = () => {
+    if (windowWidth >= 1200) return 4 // xl breakpoint
+    if (windowWidth >= 992) return 3 // lg breakpoint
+    if (windowWidth >= 768) return 2 // md breakpoint
+    return 1 // default for small screens
+  }
+
+  // Calculate grid template columns
+  const getGridTemplateColumns = () => {
+    const count = getColumnCount()
+    return `repeat(${count}, 1fr)`
+  }
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#1a1f2b",
+        padding: "2rem",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "1400px",
+          marginLeft: "auto",
+          marginRight: "auto",
+          display: "flex",
+          flexDirection: "column",
+          gap: "2rem",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "1rem",
+          }}
+        >
+          <h1
+            style={{
+              fontSize: "2.5rem",
+              fontWeight: 600,
+              margin: 0,
+              color: "#22c55e",
+              fontFamily: "system-ui, -apple-system, sans-serif",
+            }}
+          >
+            Biblioteca de juegos
+          </h1>
+
+          <form
+            onSubmit={handleSearch}
+            style={{
+              flex: "1",
+              maxWidth: "500px",
+            }}
+          >
+            <div
+              style={{
+                position: "relative",
+                width: "100%",
+              }}
+            >
+              <input
+                type="text"
+                style={{
+                  width: "100%",
+                  padding: "0.75rem 1rem",
+                  fontSize: "1rem",
+                  color: "#ffffff",
+                  backgroundColor: "#0f1319",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: "0.75rem",
+                  outline: "none",
+                }}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Buscar juegos..."
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "#22c55e"
+                  e.currentTarget.style.boxShadow = "0 0 0 2px rgba(34,197,94,0.2)"
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"
+                  e.currentTarget.style.boxShadow = "none"
+                }}
+              />
             </div>
+          </form>
+        </div>
 
-            {isLoading ? (
-                <div className="flex justify-center items-center h-64">
-                    <p className="text-green-600 text-xl font-semibold animate-pulse">Cargando juegos...</p>
-                </div>
-            ) : (
-                <>
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {games.length > 0 ? (
-                            games.map((game) => (
-                                <Link to={`/gamesDetails/${game.id}`} key={game.id}>
-                                    <div className="bg-gray-900 rounded-3xl overflow-hidden shadow-xl transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl">
-                                        <img
-                                            src={game.background_image || "/placeholder.svg"}
-                                            alt={game.name}
-                                            className="w-full h-56 object-cover rounded-t-3xl"
-                                        />
-                                        <div className="p-6">
-                                            <h3 className="text-xl font-semibold text-white mb-4 truncate">{game.name}</h3>
-                                            <div className="flex justify-between items-center mb-4">
-                                                <p className="text-yellow-500 font-semibold">⭐ {game.rating}</p>
-                                                <span className="bg-green-600 text-white text-xs font-semibold px-4 py-1 rounded-full">
-                                                    {game.released ? new Date(game.released).getFullYear() : "N/A"}
-                                                </span>
-                                            </div>
-                                            <div className="flex flex-wrap gap-2">
-                                                {game.genres &&
-                                                    game.genres.slice(0, 3).map((genre) => (
-                                                        <span
-                                                            key={genre.id}
-                                                            className="bg-gray-200 text-gray-800 text-xs font-medium px-4 py-2 rounded-full hover:bg-green-500 hover:text-white transition-all duration-200"
-                                                        >
-                                                            {genre.name}
-                                                        </span>
-                                                    ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))
-                        ) : (
-                            <p className="text-center text-gray-400 text-lg">No se encontraron juegos.</p>
-                        )}
-                    </div>
+        {isLoading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "200px",
+            }}
+          >
+            <div
+              style={{
+                border: "4px solid rgba(255,255,255,0.1)",
+                borderTop: "4px solid #22c55e",
+                borderRadius: "50%",
+                width: "40px",
+                height: "40px",
+                animation: "spin 1s linear infinite",
+              }}
+            />
+            <style
+              dangerouslySetInnerHTML={{
+                __html: `
+              @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+            `,
+              }}
+            />
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: getGridTemplateColumns(),
+              gap: "1.5rem",
+            }}
+          >
+            {games.map((game) => (
+              <GamesPoster key={game.id} game={game} />
+            ))}
+          </div>
+        )}
 
-                    {/* Paginación */}
-                    <div className="flex justify-end mt-6">
-                        <nav className="inline-flex rounded-md shadow-sm">
-                            <button
-                                onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={currentPage === 1}
-                                className="px-4 py-2 text-sm font-medium text-green-600 bg-gray-800 border border-green-600 rounded-l-md hover:bg-green-600 hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                Anterior
-                            </button>
-                            <span className="px-4 py-2 text-sm font-medium text-white bg-gray-800 border-t border-b border-green-600">
-                                Página {currentPage} de {totalPages}
-                            </span>
-                            <button
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === totalPages}
-                                className="px-4 py-2 text-sm font-medium text-green-600 bg-gray-800 border border-green-600 rounded-r-md hover:bg-green-600 hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                Siguiente
-                            </button>
-                        </nav>
-                    </div>
-                </>
-            )}
-        </section>
-    );
-};
+        {!isLoading && games.length > 0 && (
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+        )}
+      </div>
+    </div>
+  )
+}
 
-export default Games;
+export default Games
+

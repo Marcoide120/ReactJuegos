@@ -3,78 +3,83 @@ import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav className="bg-gray-900 w-full px-6 py-4">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex items-center space-x-4">
+    <nav
+      style={{
+        backgroundColor: "#0B1120",
+        width: "100%",
+        padding: "1rem 1.25rem", // Reducido el padding
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "100%",
+          margin: "0 auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0 1.5rem", // Reducido el padding
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}> {/* Reducido el gap */}
           <img
             src="/logo2.png"
-            className="h-12 w-12 object-contain animate-pulse"
+            style={{ height: "3rem", width: "3rem", objectFit: "contain" }}
             alt="Logo"
           />
-          <span className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-700 to-green-400">
-            Juegoteca virtual
+          <span
+            style={{
+              fontSize: "1.875rem",
+              fontWeight: "bold",
+              backgroundImage: "linear-gradient(to right, #047857, #10B981)",
+              WebkitBackgroundClip: "text",
+              color: "transparent",
+            }}
+          >
+            Juegoteca Virtual
           </span>
         </div>
 
-        <div className="flex-grow flex items-center justify-center space-x-12">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `relative px-4 py-2 text-xl font-medium transition-all duration-300 ease-in-out overflow-hidden ${
-                isActive ? "text-green-400" : "text-gray-300 hover:text-green-400"
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <span className="relative z-10">Home</span>
-                <span className="absolute inset-0 bg-green-400 opacity-10 transform scale-x-0 origin-left transition-transform duration-300 ease-out group-hover:scale-x-100" />
-                {isActive && (
-                  <span className="absolute bottom-0 left-0 w-full h-1 bg-green-400 animate-pulse" />
-                )}
-              </>
-            )}
-          </NavLink>
-
-          <NavLink
-            to="/Games"
-            className={({ isActive }) =>
-              `relative px-4 py-2 text-xl font-medium transition-all duration-300 ease-in-out overflow-hidden ${
-                isActive ? "text-green-400" : "text-gray-300 hover:text-green-400"
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <span className="relative z-10">Biblioteca</span>
-                <span className="absolute inset-0 bg-green-400 opacity-10 transform scale-x-0 origin-left transition-transform duration-300 ease-out group-hover:scale-x-100" />
-                {isActive && (
-                  <span className="absolute bottom-0 left-0 w-full h-1 bg-green-400 animate-pulse" />
-                )}
-              </>
-            )}
-          </NavLink>
-
-          <NavLink
-            to="/Publisher"
-            className={({ isActive }) =>
-              `relative px-4 py-2 text-xl font-medium transition-all duration-300 ease-in-out overflow-hidden ${
-                isActive ? "text-green-400" : "text-gray-300 hover:text-green-400"
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <span className="relative z-10">Publishers</span>
-                <span className="absolute inset-0 bg-green-400 opacity-10 transform scale-x-0 origin-left transition-transform duration-300 ease-out group-hover:scale-x-100" />
-                {isActive && (
-                  <span className="absolute bottom-0 left-0 w-full h-1 bg-green-400 animate-pulse" />
-                )}
-              </>
-            )}
-          </NavLink>
+        <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}> {/* Reducido el gap */}
+          {[
+            { to: "/", label: "Home" },
+            { to: "/Games", label: "Biblioteca" },
+            { to: "/Publisher", label: "Publishers" },
+          ].map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              style={({ isActive }) => ({
+                position: "relative",
+                padding: "0.5rem 0.75rem", // Reducido el padding
+                fontSize: "1.25rem",
+                fontWeight: "500",
+                transition: "color 0.3s ease-in-out",
+                color: isActive ? "#10B981" : "#D1D5DB",
+                textDecoration: "none",
+              })}
+            >
+              {({ isActive }) => (
+                <>
+                  <span style={{ position: "relative", zIndex: 10 }}>
+                    {link.label}
+                  </span>
+                  {isActive && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        bottom: "-2px",
+                        left: 0,
+                        width: "100%",
+                        height: "2px",
+                        backgroundColor: "#10B981",
+                      }}
+                    />
+                  )}
+                </>
+              )}
+            </NavLink>
+          ))}
         </div>
-
       </div>
     </nav>
   );
